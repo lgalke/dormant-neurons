@@ -5,6 +5,10 @@ from datasets import load_dataset
 from typing import Dict, List, Optional, Union
 from tqdm import tqdm
 import argparse
+import logging
+import csv
+from datetime import datetime
+import os
 
 
 class ActivationCapture:
@@ -346,6 +350,92 @@ def print_dormancy_report(results: Dict, verbose: bool = True):
                 print(f"  First few dormant indices: {stats['dormant_indices'][:10].tolist()}")
 
 
+def log_dormancy_results(
+    results: Dict,
+    model_name: str,
+    revision: Optional[str] = None,
+    step: Optional[int] = None,
+    threshold: float = 0.1,
+    output_file: Optional[str] = None,
+    mode: str = 'append'
+):
+    """
+    Log dormancy results to a CSV file.
+    
+    Args:
+        results: Dictionary with dormancy statistics per layer
+        model_name: Name of the model analyzed
+        revision: Model revision/checkpoint (e.g., 'step3000')
+        step: Training step number (if available)
+        threshold: Dormancy threshold used
+        output_file: Path to output CSV file. If None, generates a default name.
+        mode: 'append' to append to existing file, 'write' to overwrite
+    """
+    if not results:
+        print("No results to log.")
+        return
+    
+    # Generate default filename if not provided
+    if output_file is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        safe_model_name = model_name.replace('/', '_')
+        output_file = f"dormancy_results_{safe_model_name}_{timestamp}.csv"
+    
+    # Determine if file exists and needs header
+    file_exists = os.path.exists(output_file)
+    write_header = not file_exists or mode == 'write'
+    
+    # Open file in append or write mode
+    file_mode = 'w' if mode == 'write' else 'a'
+    
+    with open(output_file, file_mode, newline='') as csvfile:
+        fieldnames = [
+            'timestamp',
+            'model',
+            'revision',
+            'step',
+            'threshold',
+            'layer_name',
+            'layer_index',
+            'num_neurons',
+            'num_dormant',
+            'pct_dormant',
+            'avg_activation',
+            'max_activation'
+        ]
+        
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        
+        if write_header:
+            writer.writeheader()
+        
+        # Get timestamp for this analysis
+        timestamp = datetime.now().isoformat()
+        
+        # Write results for each layer
+        for layer_idx, (layer_name, stats) in enumerate(sorted(results.items())):
+            row = {
+                'timestamp': timestamp,
+                'model': model_name,
+                'revision': revision if revision else 'N/A',
+                'step': step if step is not None else 'N/A',
+                'threshold': threshold,
+                'layer_name': layer_name,
+                'layer_index': layer_idx,
+                'num_neurons': stats['num_neurons'],
+                'num_dormant': stats['num_dormant'],
+                'pct_dormant': round(stats['pct_dormant'], 4),
+                'avg_activation': round(stats['avg_activation'], 6) if 'avg_activation' in stats else 'N/A',
+                'max_activation': round(stats['max_activation'], 6) if 'max_activation' in stats else 'N/A'
+            }
+            writer.writerow(row)
+    
+    print(f"\n✓ Results logged to: {output_file}")
+    print(f"  Mode: {mode}")
+    print(f"  Layers logged: {len(results)}")
+    return output_file
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Analyze dormant neurons in HuggingFace language models"
@@ -413,6 +503,27 @@ def main():
         help="Model revision/checkpoint (e.g., 'step3000' for Pythia)"
     )
 
+    parser.add_argument(
+        "--step",
+        type=int,
+        default=None,
+        help="Training step number (for logging purposes)"
+    )
+
+    parser.add_argument(
+        "--log-file",
+        type=str,
+        default=None,
+        help="Output CSV file for logging results (default: auto-generated)"
+    )
+
+    parser.add_argument(
+        "--log-mode",
+        type=str,
+        default="append",
+        choices=["append", "write"],
+        help="Logging mode: 'append' to add to existing file, 'write' to overwrite"
+    )
 
     parser.add_argument(
         "--debug",
@@ -437,6 +548,17 @@ def main():
     )
     
     print_dormancy_report(results, verbose=True)
+    
+    # Log results to CSV file
+    log_dormancy_results(
+        results=results,
+        model_name=args.model,
+        revision=args.revision,
+        step=args.step,
+        threshold=args.threshold,
+        output_file=args.log_file,
+        mode=args.log_mode
+    )
 
 
 if __name__ == "__main__":

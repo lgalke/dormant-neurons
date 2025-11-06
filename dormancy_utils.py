@@ -49,8 +49,11 @@ def compute_dormant_neurons(
     
     results = {
         'num_dormant': int(np.sum(dormant_mask)),
+        'num_neurons': int(len(scores)),
         'pct_dormant': float(100 * np.mean(dormant_mask)),
         'dormant_indices': dormant_indices,
+        'avg_activation': float(np.mean(mean_abs_activations)),
+        'max_activation': float(np.max(mean_abs_activations)),
     }
     
     if return_scores:
