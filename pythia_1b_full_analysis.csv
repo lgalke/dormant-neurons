@@ -1,0 +1,17 @@
+timestamp,model,revision,step,threshold,layer_name,layer_index,num_neurons,num_dormant,pct_dormant,avg_activation,max_activation
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.0.mlp.act,0,8192,0,0.0,0.219241,1.180901
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.1.mlp.act,1,8192,0,0.0,0.189781,1.059167
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.10.mlp.act,2,8192,0,0.0,0.171781,0.888783
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.11.mlp.act,3,8192,0,0.0,0.170456,0.665088
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.12.mlp.act,4,8192,0,0.0,0.171606,1.011911
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.13.mlp.act,5,8192,0,0.0,0.174423,0.957239
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.14.mlp.act,6,8192,0,0.0,0.173633,0.808856
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.15.mlp.act,7,8192,0,0.0,0.174104,0.863582
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.2.mlp.act,8,8192,0,0.0,0.18981,1.037314
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.3.mlp.act,9,8192,0,0.0,0.179078,1.03034
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.4.mlp.act,10,8192,0,0.0,0.176193,0.857983
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.5.mlp.act,11,8192,0,0.0,0.182496,0.962503
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.6.mlp.act,12,8192,0,0.0,0.180642,0.875016
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.7.mlp.act,13,8192,0,0.0,0.175237,0.987027
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.8.mlp.act,14,8192,0,0.0,0.176076,0.803578
+2025-11-06T15:22:43.735761,EleutherAI/pythia-1b-deduped-v0,step1000,1000,0.2,layers.9.mlp.act,15,8192,0,0.0,0.175308,0.983467
